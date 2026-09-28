@@ -1,0 +1,30 @@
+{
+  "id": "septuagint",
+  "emoji": "📜",
+  "title": "Septuagint",
+  "tagline": "Septuagint Tabular Explorer",
+  "language": "Koine Greek",
+  "created": "2026-09-28",
+  "url": "https://septuagint.contabulate.org/",
+  "source": "https://github.com/brainheart/septuagint-contabulate",
+  "text_label": "books",
+  "segment_label": "verses",
+  "sample_queries": [
+    {
+      "label": "Which books speak most of mercy (ἔλεος)?",
+      "url": "https://septuagint.contabulate.org/?cs=1&zr=0&hl=1&q=%5E%28%E1%BC%94%CE%BB%CE%B5%5B%CE%BF%CF%8C%5D%5B%CF%82%CE%BD%5D%7C%E1%BC%90%CE%BB%CE%AD%CE%BF%CF%85%5B%CF%82%CF%83%5D%7C%E1%BC%90%CE%BB%CE%AD%CE%B5%CE%B9%29%24&nm=1&gran=play&mm=regex&ts=%255B%257B%2522t%2522%253A%2522%255E%28%25E1%25BC%2594%25CE%25BB%25CE%25B5%255B%25CE%25BF%25CF%258C%255D%255B%25CF%2582%25CE%25BD%255D%257C%25E1%25BC%2590%25CE%25BB%25CE%25AD%25CE%25BF%25CF%2585%255B%25CF%2582%25CF%2583%255D%257C%25E1%25BC%2590%25CE%25BB%25CE%25AD%25CE%25B5%25CE%25B9%29%2524%2522%252C%2522m%2522%253A%2522regex%2522%252C%2522n%2522%253A1%252C%2522d%2522%253A%2522count%2522%257D%255D&sk=t0_count&sd=desc&co=location%2Ctitle%2Cgenre%2Cnum_chapters%2Cverse_count%2Cngram_count%2Ct0_count"
+    },
+    {
+      "label": "Where was ἀγάπη before the New Testament made it famous?",
+      "url": "https://septuagint.contabulate.org/?cs=1&zr=0&hl=1&q=%5E%E1%BC%80%CE%B3%CE%AC%CF%80%5B%CE%B7%E1%BF%83%5D%5B%CF%82%CE%BD%5D%3F%24&nm=1&gran=play&mm=regex&ts=%255B%257B%2522t%2522%253A%2522%255E%25E1%25BC%2580%25CE%25B3%25CE%25AC%25CF%2580%255B%25CE%25B7%25E1%25BF%2583%255D%255B%25CF%2582%25CE%25BD%255D%253F%2524%2522%252C%2522m%2522%253A%2522regex%2522%252C%2522n%2522%253A1%252C%2522d%2522%253A%2522count%2522%257D%255D&sk=t0_count&sd=desc&co=location%2Ctitle%2Cgenre%2Cnum_chapters%2Cverse_count%2Cngram_count%2Ct0_count"
+    },
+    {
+      "label": "Which books go down to Hades (ᾅδης)?",
+      "url": "https://septuagint.contabulate.org/?cs=1&zr=0&hl=1&q=%5E%E1%BE%85%CE%B4%28%CE%B7%CF%82%7C%CE%BF%CF%85%7C%E1%BF%83%7C%CE%B7%CE%BD%29%24&nm=1&gran=play&mm=regex&ts=%255B%257B%2522t%2522%253A%2522%255E%25E1%25BE%2585%25CE%25B4%28%25CE%25B7%25CF%2582%257C%25CE%25BF%25CF%2585%257C%25E1%25BF%2583%257C%25CE%25B7%25CE%25BD%29%2524%2522%252C%2522m%2522%253A%2522regex%2522%252C%2522n%2522%253A1%252C%2522d%2522%253A%2522count%2522%257D%255D&sk=t0_count&sd=desc&co=location%2Ctitle%2Cgenre%2Cnum_chapters%2Cverse_count%2Cngram_count%2Ct0_count"
+    },
+    {
+      "label": "Which psalm is “Κύριος ποιμαίνει με” in the Septuagint’s numbering?",
+      "url": "https://septuagint.contabulate.org/?cs=1&zr=0&hl=1&q=%CE%9A%CF%8D%CF%81%CE%B9%CE%BF%CF%82+%CF%80%CE%BF%CE%B9%CE%BC%CE%B1%CE%AF%CE%BD%CE%B5%CE%B9+%CE%BC%CE%B5&nm=1&gran=verse&mm=exact&ts=%255B%257B%2522t%2522%253A%2522%25CE%259A%25CF%258D%25CF%2581%25CE%25B9%25CE%25BF%25CF%2582%2520%25CF%2580%25CE%25BF%25CE%25B9%25CE%25BC%25CE%25B1%25CE%25AF%25CE%25BD%25CE%25B5%25CE%25B9%2520%25CE%25BC%25CE%25B5%2522%252C%2522m%2522%253A%2522exact%2522%252C%2522n%2522%253A3%252C%2522d%2522%253A%2522count%2522%257D%255D&sk=t0_count&sd=desc&co=location%2Cplay_title%2Cact%2Cscene%2Cline%2Ct0_count"
+    }
+  ]
+}

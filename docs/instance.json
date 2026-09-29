@@ -28,12 +28,12 @@
   ],
   "updated": "2026-09-28",
   "stats": {
-    "texts": 55,
+    "texts": 56,
     "text_label": "books",
-    "segments": 29357,
+    "segments": 29583,
     "segment_label": "verses",
-    "words": 587557,
-    "distinct_words": 57103,
+    "words": 592121,
+    "distinct_words": 57347,
     "commentaries": 0,
     "comments": 0
   }

@@ -226,5 +226,32 @@
       "url": "https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/8ee111eb44ecef4120c844e10749178d95d1f30c/data/tlg0527/tlg059/tlg0527.tlg059.1st1K-grc1.xml",
       "sha256": "2af9b536e2cf12e1f6bc52a6ceae10f02e7c75290d4f35623f40c35bc78a8453"
     }
+  },
+  "brenton": {
+    "edition": "L. C. L. Brenton, The Septuagint Version of the Old Testament (London: Bagster, 1844/1851), Greek text (Sixtine, Codex Vaticanus-based)",
+    "digitization": "eBible.org grcbrent (USFM, source files dated 2026-04-08)",
+    "license": "Public Domain (copr.htm)",
+    "url": "https://ebible.org/Scriptures/grcbrent_usfm.zip",
+    "sha256": "964b96f1de0d47aabde9e2178a6776ea7851bcab2d6c8c115a94807f61293429",
+    "retrieved": "2026-09-28",
+    "used_for": "Ecclesiastes (absent from First1KGreek) and Exod 20:1, Num 17:1 (= Brenton 17:16), Num 19:1, 3 Kgdms 16:1 (verse text lost in the transcription)",
+    "fetch": "python3 scripts/fetch_brenton.py",
+    "files": {
+      "brenton/22-ECCgrcbrent.usfm": {
+        "sha256": "89154911ca8bf152b7d645e575007e21b5200f335b0c6b08bb5876846f8e7669"
+      },
+      "brenton/03-EXOgrcbrent.usfm": {
+        "sha256": "a8a3255196adbf0382da118a62d618515dca4b09620adbfdb5004adfcfa53a22"
+      },
+      "brenton/05-NUMgrcbrent.usfm": {
+        "sha256": "bf21677259596e10c934517f1e82c42a15f45e311c92fec88264aaa5c4e2b82b"
+      },
+      "brenton/12-1KIgrcbrent.usfm": {
+        "sha256": "7c61dbbd7cf68a9d9102be7a72c7cd327503ba4c3d50e76492d60b8da7147bee"
+      },
+      "brenton/copr.htm": {
+        "sha256": "00778564d297029782272103be7d2c48b89951f1bae1aa86becd9d2b43b5ae46"
+      }
+    }
   }
 }

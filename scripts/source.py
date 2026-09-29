@@ -6,6 +6,10 @@ books of Kingdoms, Esdras B as one book of 23 chapters, Old Greek and
 Theodotion Daniel/Susanna/Bel side by side, Esther with its additions as
 lettered verses, and the Odes numbered by the verses of their source books.
 
+Ecclesiastes (absent from First1KGreek) and four verse-1 texts lost in the
+transcription come from Brenton's Greek (1851, public domain) and are flagged
+with text_source.
+
 Parsing rules (TEI walk, OCR repairs, Esther and Isaiah quirks) follow
 polyglot-contabulate/scripts/polyglot/sources.py; see SOURCES.md.
 """
@@ -40,6 +44,7 @@ WORKS = [
     ("018", "2Esd", "Ἔσδρας Βʹ", "2 Esdras = Ezra–Nehemiah", "Histories"),
     ("027", "Ps", "Ψαλμοί", "Psalms", "Poetry & Wisdom"),
     ("029", "Prov", "Παροιμίαι", "Proverbs", "Poetry & Wisdom"),
+    ("030", "Eccl", "Ἐκκλησιαστής", "Ecclesiastes", "Poetry & Wisdom"),
     ("031", "Song", "Ἆσμα", "Song of Songs", "Poetry & Wisdom"),
     ("032", "Job", "Ἰώβ", "Job", "Poetry & Wisdom"),
     ("033", "Wis", "Σοφία Σαλωμῶνος", "Wisdom of Solomon", "Poetry & Wisdom"),
@@ -80,6 +85,24 @@ WORKS = [
 ]
 SWETE_FILE = {"034": "tlg0527.tlg034.1st1K-grc2.xml"}  # grc1 there is Hart's edition
 
+# Brenton's Greek (1851, public domain; ebible.org grcbrent USFM) fills what the
+# transcription lacks. Every row taken from it carries text_source = BRENTON.
+BRENTON = "Brenton 1851"
+# First1KGreek tlg0527.tlg030 (Ecclesiastes) has no text; Swete prints it after
+# Proverbs (vol. 2), so it keeps that place in WORKS.
+BRENTON_BOOKS = {"030": "22-ECCgrcbrent.usfm"}
+# Verse divisions whose text the transcription lost (only a marginal chapter
+# numeral survives), keyed by Swete reference -> Brenton (file, chapter, verse).
+# Both neighbours were compared with Brenton's; tests re-check them.
+# 3 Kgdms 14:1 is not here: 14:1-20 is absent from Codex B, Swete and Brenton.
+BRENTON_VERSES = {
+    ("Exod", 20, "1"): ("03-EXOgrcbrent.usfm", "20", "1"),
+    # Brenton numbers Num 16:36-50 as 17:1-15, so Swete 17:1 is Brenton 17:16.
+    ("Num", 17, "1"): ("05-NUMgrcbrent.usfm", "17", "16"),
+    ("Num", 19, "1"): ("05-NUMgrcbrent.usfm", "19", "1"),
+    ("3Kgdms", 16, "1"): ("12-1KIgrcbrent.usfm", "16", "1"),
+}
+
 # Verse numbers the automatic OCR repair cannot decide, and chapters the
 # transcription mislabels (Wisdom 15-19 are tagged 16-20; incipit of the
 # first, "Σὺ δὲ ὁ θεὸς ἡμῶν χρηστὸς", is Wis 15:1).
@@ -96,7 +119,7 @@ REPAIRS = []  # (reference, old, new), reported in SOURCES.md and by the build
 
 def verify_source_files(directory):
     provenance = json.loads((directory / "provenance.json").read_text())
-    for name, info in provenance["files"].items():
+    for name, info in {**provenance["files"], **provenance["brenton"]["files"]}.items():
         if hashlib.sha256((directory / name).read_bytes()).hexdigest() != info["sha256"]:
             raise ValueError(f"Source checksum mismatch: {directory / name}")
     return provenance
@@ -321,15 +344,73 @@ def load_book(path, book):
     return out
 
 
+USFM_NOTE_RE = re.compile(r"\\(f|fe|x|fig)\s.*?\\\1\*", re.S)  # footnotes, cross-refs
+USFM_WORD_RE = re.compile(r"\\(\+?w)\s+([^|\\]*)(?:\|[^\\]*)?\\\1\*")  # \w word|lemma="…"\w*
+# Identification, titles, headings and remarks are not verse text.
+USFM_SKIP_LINE_RE = re.compile(r"^\\(?:id|ide|h|toc\d*|toca\d*|mt\d*|mte\d*|ms\d*|mr|s\d*|sr|r|rem|sts|cl|cp)\b.*$",
+                               re.M)
+USFM_MARKER_RE = re.compile(r"\\\+?[a-z]+\d*\*?")  # remaining paragraph/character markers
+
+
+def parse_usfm(path):
+    """{(chapter, verse label): text} of one USFM book, markup stripped and
+    normalized like the Swete text (NFC, spacing, ’ for elision)."""
+    usfm = USFM_NOTE_RE.sub(" ", path.read_text(encoding="utf-8"))
+    usfm = USFM_SKIP_LINE_RE.sub("", USFM_WORD_RE.sub(r"\2", usfm))
+    parts = re.split(r"\\([cv])\s+(\S+)", usfm)
+    verses, chapter = {}, None
+    for kind, number, body in zip(parts[1::3], parts[2::3], parts[3::3]):
+        if kind == "c":
+            chapter = number
+            continue
+        text = re.sub(r"\s+", " ", USFM_MARKER_RE.sub(" ", body).replace("\u02bc", "’")).strip()
+        verses[(chapter, number)] = unicodedata.normalize("NFC", re.sub(r"\s+([,.;:·])", r"\1", text))
+    return verses
+
+
+def _brenton(row):
+    row["text_source"] = BRENTON
+    return row
+
+
+def load_brenton_book(path, book):
+    out = []
+    for (chapter, verse), text in parse_usfm(path).items():
+        if not (chapter.isdigit() and verse.isdigit()):
+            raise ValueError(f"unexpected USFM reference {chapter}:{verse} in {path.name}")
+        c, v = int(chapter), int(verse)
+        out.append(_brenton(_verse(book, c, None, v, str(v), f"{v:03d}", text)))
+    return out
+
+
+def fill_from_brenton(source_dir, book, verses):
+    """Insert the verse-1 texts lost in the transcription (BRENTON_VERSES)."""
+    for (code, chapter, label), (name, b_chapter, b_verse) in BRENTON_VERSES.items():
+        if code != book:
+            continue
+        if any(v["chapter"] == chapter and v["verse_label"] == label for v in verses):
+            raise ValueError(f"{book} {chapter}:{label} is no longer missing; drop it from BRENTON_VERSES")
+        text = parse_usfm(source_dir / "brenton" / name)[(b_chapter, b_verse)]
+        at = next(i for i, v in enumerate(verses) if v["chapter"] == chapter and v["verse"] > int(label))
+        verses.insert(at, _brenton(_verse(book, chapter, None, int(label), label, f"{int(label):03d}", text)))
+    return verses
+
+
 def load_books(source_dir):
     verify_source_files(source_dir)
     del REPAIRS[:]
-    positions = [swete_position(work_path(source_dir, w[0])) for w in WORKS]
-    if positions != sorted(positions):
+    positions = [None if w[0] in BRENTON_BOOKS else swete_position(work_path(source_dir, w[0]))
+                 for w in WORKS]
+    swete_positions = [p for p in positions if p]
+    if swete_positions != sorted(swete_positions):
         raise ValueError("WORKS is not in Swete's volume/page order")
     books = []
-    for work, code, greek, english, section in WORKS:
-        verses = load_book(work_path(source_dir, work), code)
-        books.append({"abbr": code, "title": f"{greek} ({english})", "genre": section,
-                      "verses": verses, "swete": positions[len(books)]})
+    for (work, code, greek, english, section), position in zip(WORKS, positions):
+        book = {"abbr": code, "title": f"{greek} ({english})", "genre": section, "swete": position}
+        if work in BRENTON_BOOKS:
+            book["verses"] = load_brenton_book(source_dir / "brenton" / BRENTON_BOOKS[work], code)
+            book["text_source"] = BRENTON
+        else:
+            book["verses"] = fill_from_brenton(source_dir, code, load_book(work_path(source_dir, work), code))
+        books.append(book)
     return books

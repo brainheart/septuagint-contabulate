@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Search Swete's Septuagint by word, phrase, or regex across sections, books, chapters, verses, and vocabulary. All 55 books of the Open Greek and Latin transcription in Swete's own order and numbering, including 1–4 Maccabees, the Psalms of Solomon, and the Odes.">
+  <meta name="description" content="Search Swete's Septuagint by word, phrase, or regex across sections, books, chapters, verses, and vocabulary. All 56 books of the Open Greek and Latin transcription (Ecclesiastes from Brenton) in Swete's own order and numbering, including 1–4 Maccabees, the Psalms of Solomon, and the Odes.">
   <meta name="author" content="Reinhard Engels">
   <link rel="canonical" href="https://septuagint.contabulate.org/">
   <meta property="og:title" content="Contabulate: Septuagint Tabular Explorer">
-  <meta property="og:description" content="Search Swete's Septuagint by word, phrase, or regex across sections, books, chapters, verses, and vocabulary. All 55 books of the Open Greek and Latin transcription in Swete's own order and numbering, including 1–4 Maccabees, the Psalms of Solomon, and the Odes.">
+  <meta property="og:description" content="Search Swete's Septuagint by word, phrase, or regex across sections, books, chapters, verses, and vocabulary. All 56 books of the Open Greek and Latin transcription (Ecclesiastes from Brenton) in Swete's own order and numbering, including 1–4 Maccabees, the Psalms of Solomon, and the Odes.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://septuagint.contabulate.org/">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%238b1538' d='M53 8c-12 2-21 11-25 22l-6 17c-1 3-4 5-7 6l-4 2 2-4c1-3 3-6 6-7l17-6C47 34 56 25 58 13l1-6-6 1z'/%3E%3Cpath fill='%238b1538' d='M21 43l-6 6 2 2 6-6z'/%3E%3Cpath fill='%238b1538' d='M31 22l11 11 2-2-11-11z'/%3E%3C/svg%3E">
@@ -22,7 +22,7 @@
     </div>
   </div>
   <h1><a href="https://contabulate.org/">Contabulate</a>: 📜 Septuagint Tabular Explorer</h1>
-  <p class="muted">A sortable, filterable table of the Septuagint — by section, book, chapter, or verse, or flipped to its vocabulary: word, bigram, and trigram rows. Add search-term columns (1–3 words) and text metrics such as sentence length and lexical rarity; the metrics live under the <strong>+</strong> at the right edge of the table. Text: H. B. Swete, <i>The Old Testament in Greek according to the Septuagint</i> (public domain), in the <a href="https://github.com/OpenGreekAndLatin/First1KGreek" target="_blank" rel="noopener">Open Greek and Latin First1KGreek</a> transcription (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>). Books follow Swete's order and numbering: four books of Kingdoms, Esdras B as one book, Old Greek and Theodotion Daniel side by side, 1–4 Maccabees, the Psalms of Solomon, and the Odes.</p>
+  <p class="muted">A sortable, filterable table of the Septuagint — by section, book, chapter, or verse, or flipped to its vocabulary: word, bigram, and trigram rows. Add search-term columns (1–3 words) and text metrics such as sentence length and lexical rarity; the metrics live under the <strong>+</strong> at the right edge of the table. Text: H. B. Swete, <i>The Old Testament in Greek according to the Septuagint</i> (public domain), in the <a href="https://github.com/OpenGreekAndLatin/First1KGreek" target="_blank" rel="noopener">Open Greek and Latin First1KGreek</a> transcription (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>); Ecclesiastes, which that transcription lacks, and four lost verses are Brenton's Greek (1851, public domain), marked <sup class="text-source" title="text: Brenton 1851">Br</sup>. Books follow Swete's order and numbering: four books of Kingdoms, Esdras B as one book, Old Greek and Theodotion Daniel side by side, 1–4 Maccabees, the Psalms of Solomon, and the Odes.</p>
 
   <p class="muted">Search preserves Greek accents and breathings; capitalization and elision marks are ignored, so enclitic forms such as <span lang="grc">ἔλεός</span> are separate words — use a regex to combine them. Try <a href="?q=%E1%BC%94%CE%BB%CE%B5%CE%BF%CF%82&amp;gran=line">ἔλεος</a> or <a href="?q=%CE%9A%CF%8D%CF%81%CE%B9%CE%BF%CF%82%20%CF%80%CE%BF%CE%B9%CE%BC%CE%B1%CE%AF%CE%BD%CE%B5%CE%B9%20%CE%BC%CE%B5&amp;gran=line">Κύριος ποιμαίνει με</a>. <a href="sources.html">Edition, numbering, and sources</a>.</p>
 
@@ -1748,6 +1748,7 @@
           scene: ln.scene,
           act_label: ln.act_label,
           scene_label: ln.scene_label,
+          text_source: ln.text_source,
           line_num: ln.line_num,
           speaker: ln.speaker || '',
           line: clean
@@ -2424,6 +2425,17 @@
     return rows.slice();
   }
 
+  // Rows whose text is not from Swete (Brenton fills Ecclesiastes and lost verses).
+  function buildTextSourceMarker(source) {
+    const mark = document.createElement('sup');
+    mark.className = 'text-source';
+    mark.textContent = 'Br';
+    mark.title = `text: ${source} (public domain), not Swete — see Sources`;
+    mark.setAttribute('aria-label', mark.title);
+    mark.dataset.textSource = source;
+    return mark;
+  }
+
   function renderSegmentsPage() {
     const totalPages = getTotalPages(segmentsAllRows.length, segmentsPageSize);
     const paginatedRows = paginateArray(segmentsAllRows, segmentsCurrentPage, segmentsPageSize);
@@ -2520,6 +2532,10 @@
           }
         }
         if (k === 'title' || k === 'play_title') td.classList.add('book-cell');
+        const textSource = k === 'line' ? r.text_source
+          : ((k === 'title' || k === 'play_title') && (granVal === 'play' || granVal === 'act'))
+            ? (playsById.get(r.play_id) || {}).text_source : null;
+        if (textSource) td.appendChild(buildTextSourceMarker(textSource));
         const rankHint = getNumericRankHint(numericRankIndex, k, r[k]);
         if (rankHint) {
           td.classList.add('ranked-cell');

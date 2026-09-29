@@ -1,14 +1,18 @@
 # Septuagint Contabulate
 
 A static [Contabulate](https://contabulate.org/) instance for H. B. Swete's
-Septuagint: a sortable, filterable table of all 55 books in the Open Greek and
-Latin transcription, by section, book, chapter, verse, word, bigram, and trigram,
-with search-term and text-metric columns. Canonical URL (not yet deployed):
+Septuagint: a sortable, filterable table of all 56 books in the Open Greek and
+Latin transcription (Ecclesiastes from Brenton), by section, book, chapter,
+verse, word, bigram, and trigram, with search-term and text-metric columns. Canonical URL (not yet deployed):
 https://septuagint.contabulate.org/
 
 - Books follow Swete's own order and numbering, including LXX-only books
   (1 Esdras, 3–4 Maccabees, Psalms of Solomon, Odes, Psalm 151) and both Old
   Greek and Theodotion Daniel/Susanna/Bel.
+- Ecclesiastes, which First1KGreek lacks, and four verse-1 texts lost in the
+  transcription (Exod 20:1, Num 17:1, Num 19:1, 3 Kgdms 16:1) come from
+  Brenton's Greek (1851, public domain, Sixtine/Vaticanus-based), not Swete;
+  those rows are flagged `text_source` and marked “Br” in the table.
 - Greek normalization matches gnt-contabulate (NFC; case and elision ignored;
   accents and breathings kept).
 - Sources, repairs, and known limits: `SOURCES.md` and `docs/sources.html`.
@@ -29,4 +33,6 @@ build output; edit `scripts/source.py`, `build.py`, or `instance-meta.json` and 
 Code: MIT (see `LICENSE`). Greek text and derived data: Swete's edition is public
 domain; the First1KGreek digitization and the data derived from it (`source_text/`,
 `docs/data/`, `docs/lines/`) are CC BY-SA 4.0, attribution Open Greek and Latin /
-University of Leipzig (see `DATA-LICENSE.md`).
+University of Leipzig (see `DATA-LICENSE.md`). Brenton's Greek text
+(`source_text/brenton/`, and the Ecclesiastes and four verse rows derived from it)
+is public domain.

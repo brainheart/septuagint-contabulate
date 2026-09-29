@@ -137,6 +137,8 @@ def build(source_path: Path, out_dir: Path):
                 chunk_row["scene_label"] = line_row["scene_label"] = verse_label
             if chapter_label:
                 chunk_row["act_label"] = line_row["act_label"] = chapter_label
+            if verse.get("text_source"):  # not from the corpus's main edition
+                chunk_row["text_source"] = line_row["text_source"] = verse["text_source"]
             chunks.append(chunk_row)
             all_lines.append(line_row)
 
@@ -162,6 +164,7 @@ def build(source_path: Path, out_dir: Path):
             "total_lines": len(verses),
             "verse_count": len(verses),
             "mattr_50": round(mattr(book_tokens), 3),
+            **({"text_source": book["text_source"]} if book.get("text_source") else {}),
         })
 
     # Additive metric fields (char_count, rarity_sum, hapax_count) per verse.

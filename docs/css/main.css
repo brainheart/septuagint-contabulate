@@ -1193,3 +1193,4 @@ tr.pd-name-excluded td {
 
 /* A readable line measure also prevents very tall verse rows on phones. */
 .verse-text { min-width: 26rem; max-width: 48rem; line-height: 1.65; }
+.text-source { margin-left: .35em; font-size: .68em; font-style: italic; color: var(--burgundy); opacity: .75; cursor: help; }

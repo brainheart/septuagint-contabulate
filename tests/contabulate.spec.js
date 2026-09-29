@@ -4,7 +4,7 @@ const { test, expect } = require('@playwright/test');
 
 const CFG = {
   title: 'Septuagint Tabular Explorer',
-  books: 55,
+  books: 56,
   sample: 'ἔλεος',
   vocabProbe: 'φῶς',
   firstBook: { prefix: '01.Gen.', chapters: 50, lastChapter: '01.Gen.050' },

@@ -7,4 +7,4 @@ pinned and checked by SHA-256. Generated files in `docs/data`, `docs/lines`, and
 numbering; never remap to Rahlfs or KJV. Data derived from the transcription is
 CC BY-SA 4.0 with attribution. Ecclesiastes and four lost verse-1 texts come
 from Brenton (public domain, `source_text/brenton/`, `scripts/fetch_brenton.py`)
-and must stay flagged `text_source`. `created` in `instance-meta.json` stays 2026-09-28.
+and must stay flagged `text_source`. `created` in `instance-meta.json` stays 2026-09-28. The English lookup data (`docs/data/glossary.json`, from `source_text/lexicon/wiktionary-extract.json`) is display-only; the page must work without it.

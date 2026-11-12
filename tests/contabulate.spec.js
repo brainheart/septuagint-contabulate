@@ -79,13 +79,13 @@ test.describe('Segments Search', () => {
   });
 
   test('count cells drill down and ancestor cells filter', async ({ page }) => {
-    await page.locator('#results tbody tr').first().locator('td:nth-child(4) button.drill-link').click();
+    await page.locator('#results tbody tr').first().locator('td[data-key="num_chapters"] button.drill-link').click();
     await expect(page.locator('#gran')).toHaveValue('act');
     await expect(page.locator('#segmentsTotalInfo')).toContainText(`(${CFG.firstBook.chapters} total rows)`);
     await expect(page.locator('#segmentsActiveFilters .active-filter-chip')).toContainText(`starts with ${CFG.firstBook.prefix}`);
     await page.goBack();
     await expect(page.locator('#gran')).toHaveValue('play');
-    await page.locator('#results tbody tr').first().locator('td:nth-child(3) .drill-link').click();
+    await page.locator('#results tbody tr').first().locator('td[data-key="genre"] .drill-link').click();
     await expect(page.locator('#segmentsTotalInfo')).toContainText(`(${CFG.firstGenre.books} total rows)`);
     await expect(page.locator('#segmentsActiveFilters .active-filter-chip')).toContainText(`is ${CFG.firstGenre.name}`);
   });

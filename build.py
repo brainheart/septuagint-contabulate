@@ -234,6 +234,13 @@ def build(source_path: Path, out_dir: Path):
         "play_removals": {},
     })
     write_json(lines_dir / "all_lines.json", all_lines)
+    # English glosses and dictionary forms for every word form (reading aids).
+    from scripts.glossary import build_glossary
+    glossary, glossary_stats, source = build_glossary(tokens, source_path)
+    (data_dir / "glossary.json").write_text(json.dumps({
+        "meta": {"lang": "grc", "dir": "ltr"}, "source": source,
+        "coverage": dict(glossary_stats), **glossary,
+    }, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     if hasattr(source_module, "REPAIRS"):  # documented OCR numbering repairs
         write_json(data_dir / "source_repairs.json",
                    [{"ref": ref, "printed": old, "used": new} for ref, old, new in source_module.REPAIRS])
